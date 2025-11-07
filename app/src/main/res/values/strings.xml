@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">TTPOA Demo App</string>
+    <string name="price_tag">%1$s %2$s</string>
+    <string name="navigate_back">Navigate Back</string>
+    <string name="settings">Settings</string>
+    <string name="add_new_item">Add New Item</string>
+    <string name="add_item">Add Item</string>
+    <string name="existing_items">Existing Items</string>
+    <string name="selected_currency">Selected Currency</string>
+    <string name="app_logo">App Logo</string>
+    <string name="adyen_ttpoa_configuration">Adyen Configuration</string>
+    <string name="merchant_account">Merchant Account</string>
+    <string name="store">Store</string>
+    <string name="configuration_data">Configuration Data</string>
+    <string name="mobile_terminal_settings">Mobile Terminal Settings</string>
+    <string name="clear_session_button">Clear Session</string>
+    <string name="clear_adyen_session">Clear Session</string>
+    <string name="initiate_payment_on_device">Initiate Payment on Device</string>
+    <string name="select_payment_device">Select Payment Device</string>
+    <string name="abort_device_payment">Abort Device Payment</string>
+    <string name="device_payment_in_progress">Device Payment in Progress</string>
+    <string name="payment_successful">Payment Successful</string>
+    <string name="payment_failed">Payment Failed</string>
+    <string name="no_connected_devices_found">No connected devices found.</string>
+</resources>

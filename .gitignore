@@ -1,0 +1,74 @@
+# =========================================
+# Android Studio / IntelliJ
+# =========================================
+*.iml
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations/
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# =========================================
+# Gradle
+# =========================================
+.gradle/
+build/
+# Allow keeping the build.gradle file
+!build.gradle
+# Allow keeping the settings.gradle file
+!settings.gradle
+
+# =========================================
+# Local Properties
+# =========================================
+# This file contains local configuration, such as the path to the Android SDK.
+# It should never be committed to version control.
+local.properties
+secrets.properties
+
+# =========================================
+# Build artifacts
+# =========================================
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+*.jar
+
+# =========================================
+# Signing Keys
+# =========================================
+# Keystore files contain signing keys and should be kept private.
+# Never commit them to your repository.
+*.jks
+*.keystore
+
+# =========================================
+# NDK (Native Development Kit)
+# =========================================
+.cxx/
+obj/
+libs/
+so_folder/
+
+# =========================================
+# Miscellaneous
+# =========================================
+# Android Studio profiling data
+captures/
+*.hprof
+# Log files
+*.log
+
+# =========================================
+# Google Services
+# =========================================
+# Google Services file can contain sensitive information.
+# It's often better to manage this file outside of version control,
+# especially in public repositories.
+# google-services.json

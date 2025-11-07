@@ -1,0 +1,61 @@
+Project File Structure
+├── app/                           # Your main application module
+│   ├── build.gradle.kts           # Module-level build script
+│   └── src/
+│       ├── main/
+│       │   ├── java/
+│       │   │   └── com/yourcompany/yourapp/
+│       │   │       ├── di/               # 🎯 Hilt Dependency Injection Modules
+│       │   │       │   ├── DatabaseModule.kt
+│       │   │       │   └── AppModule.kt   # For providing singletons and other dependencies
+│       │   │       │
+│       │   │       ├── data/             # 💾 Data Layer (Repositories & Room)
+│       │   │       │   ├── database/
+│       │   │       │   │   ├── AppDatabase.kt
+│       │   │       │   │   ├── daos/
+│       │   │       │   │   │   ├── MenuItemDao.kt
+│       │   │       │   │   │   └── OrderDao.kt
+│       │   │       │   │   └── entities/
+│       │   │       │   │       ├── MenuItem.kt
+│       │   │       │   │       ├── Order.kt
+│       │   │       │   │       └── OrderItem.kt
+│       │   │       │   └── repository/
+│       │   │       │       ├── MenuItemRepository.kt
+│       │   │       │       └── OrderRepository.kt
+│       │   │       │
+│       │   │       ├── ui/               # 📱 UI Layer (Jetpack Compose)
+│       │   │       │   ├── screens/
+│       │   │       │   │   ├── MenuScreen.kt
+│       │   │       │   │   ├── CartScreen.kt
+│       │   │       │   │   ├── OverviewScreen.kt
+│       │   │       │   │   └── SettingsScreen.kt
+│       │   │       │   ├── components/    # Reusable Composable UI elements (e.g., custom buttons, cards)
+│       │   │       │   │   └── MenuItemCard.kt
+│       │   │       │   ├── theme/
+│       │   │       │   │   ├── Theme.kt
+│       │   │       │   │   └── Color.kt
+│       │   │       │   └── navigation/
+│       │   │       │       └── AppNavigation.kt
+│       │   │       │
+│       │   │       ├── viewmodel/        # 🧠 ViewModel Layer
+│       │   │       │   ├── MenuViewModel.kt
+│       │   │       │   ├── CartViewModel.kt
+│       │   │       │   └── SettingsViewModel.kt
+│       │   │       │
+│       │   │       └── MainActivity.kt
+│       │   │
+│       │   └── res/
+│       │       ├── drawable/
+│       │       ├── layout/
+│       │       ├── mipmap/
+│       │       └── values/
+│       │
+│       └── androidTest/           # Instrumented tests
+│       └── test/                  # Unit tests
+│
+├── gradle/
+│   ├── libs.versions.toml         # Centralized dependency management file
+│   └── wrapper/
+│
+├── build.gradle.kts               # Project-level build script
+└── settings.gradle.kts
