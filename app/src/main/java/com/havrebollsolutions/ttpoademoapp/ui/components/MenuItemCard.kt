@@ -52,6 +52,8 @@ fun MenuItemCard(
                 AsyncImage(
                     model = menuItem.imagePath.toUri(),
                     contentDescription = menuItem.name,
+                    placeholder = painterResource(id = imageResId),
+                    error = painterResource(id = imageResId),
                     modifier = Modifier
                         .size(80.dp),
                     contentScale = ContentScale.Crop
