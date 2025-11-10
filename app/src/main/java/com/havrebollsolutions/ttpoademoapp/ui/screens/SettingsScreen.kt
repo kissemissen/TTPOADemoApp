@@ -154,7 +154,7 @@ fun SettingsScreenContent(
             onDeleteItem = settingsViewModel::deleteMenuItem
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Made by Jakob Kisselgof 2025")
+        Text(text = stringResource(R.string.made_with_3_by_j_kisselgof_2025),)
     }
 }
 
