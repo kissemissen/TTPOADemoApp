@@ -38,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import com.adyen.ipp.cardreader.api.ui.DeviceManagementActivity
@@ -154,7 +155,17 @@ fun SettingsScreenContent(
             onDeleteItem = settingsViewModel::deleteMenuItem
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(R.string.made_with_3_by_j_kisselgof_2025),)
+        Row(
+            modifier = Modifier.fillMaxWidth(), // Row must fill the width
+            horizontalArrangement = Arrangement.Center // Center the content within the Row
+        ) {
+            Text(
+                text = stringResource(R.string.made_with_3_by_j_kisselgof_2025),
+                textAlign = TextAlign.Center,
+                // Modifier.fillMaxWidth() is often still a good idea here
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
