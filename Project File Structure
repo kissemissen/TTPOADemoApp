@@ -24,6 +24,7 @@ Project File Structure
 │       │   │       │       └── OrderRepository.kt
 │       │   │       │
 │       │   │       ├── ui/               # 📱 UI Layer (Jetpack Compose)
+│       │   │       │   ├── App.kt
 │       │   │       │   ├── screens/
 │       │   │       │   │   ├── MenuScreen.kt
 │       │   │       │   │   ├── CartScreen.kt

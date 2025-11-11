@@ -79,6 +79,8 @@ class DevicePaymentViewModel @Inject constructor(
                     serviceId = _uiState.value.serviceId!!
                 )
                 updateNexoResponse(nexoResponse)
+                // check if payment was successful
+                Log.e("PaymentRepository", "response: ${nexoResponse.saleToPOIResponse.paymentResponse.response.result}")
                 if (nexoResponse.saleToPOIResponse.paymentResponse.response.result == "Success") {
                     updateIsPaymentSuccessful(true)
                 }
@@ -142,6 +144,7 @@ class DevicePaymentViewModel @Inject constructor(
             )
         }
         updateServiceId(null)
+        updateIsPaymentSuccessful(false)
     }
 
     /**
