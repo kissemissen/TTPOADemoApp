@@ -12,6 +12,9 @@
 .idea/navEditor.xml
 .idea/assetWizardSettings.xml
 
+# Local files
+*.DS_store
+
 # =========================================
 # Gradle
 # =========================================
