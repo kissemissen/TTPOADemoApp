@@ -72,3 +72,6 @@ captures/
 # It's often better to manage this file outside of version control,
 # especially in public repositories.
 # google-services.json
+
+# Exclude a specific Adyen logo file from being tracked by Git
+app/src/main/res/drawable/logo_adyen_rgb_green.png

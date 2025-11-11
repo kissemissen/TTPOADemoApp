@@ -2,6 +2,7 @@ package com.havrebollsolutions.ttpoademoapp.ui.screens
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -113,7 +114,8 @@ fun TabletLayout(
                 Column(
                     modifier = Modifier
                         .weight(0.5f)
-                        .fillMaxHeight()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Bottom
                 ) {
                     Box(
                         modifier = Modifier
@@ -129,11 +131,14 @@ fun TabletLayout(
                             viewModel = menuViewModel
                         )
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                    )
                     Box(
                         modifier = Modifier
-                            .weight(0.6f)
                             .padding(8.dp)
+                            .height(200.dp)
                     ) {
                         // The OverviewScreen will use the shared cart and checkout logic.
                         OverviewScreen(

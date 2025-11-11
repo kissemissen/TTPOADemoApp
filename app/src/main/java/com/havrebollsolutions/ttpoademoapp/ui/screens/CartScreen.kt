@@ -33,6 +33,7 @@ fun CartScreen(
     onNavigateBack: () -> Unit,
     onNavigateToOverview: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    modifier: Modifier = Modifier,
     isTabletLayout: Boolean = false,
     canNavigateBack: Boolean = false,
     viewModel: MenuViewModel = hiltViewModel()
@@ -54,7 +55,7 @@ fun CartScreen(
     )
     { paddingValues ->
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .padding(paddingValues)
         ) {
             Column(
