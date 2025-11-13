@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.net.toUri
@@ -13,6 +14,7 @@ import androidx.lifecycle.viewModelScope
 import com.adyen.ipp.api.InPersonPayments
 import com.adyen.ipp.cardreader.api.ui.DeviceManagementActivity
 import com.google.gson.Gson
+import com.havrebollsolutions.ttpoademoapp.DeviceUtils
 import com.havrebollsolutions.ttpoademoapp.data.database.entities.MenuItem
 import com.havrebollsolutions.ttpoademoapp.data.models.AdyenConfig
 import com.havrebollsolutions.ttpoademoapp.data.models.Currency
@@ -21,6 +23,7 @@ import com.havrebollsolutions.ttpoademoapp.data.repository.UserPreferencesReposi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.g00fy2.quickie.QRResult
+import io.github.g00fy2.quickie.config.ScannerConfig
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -82,6 +85,19 @@ class SettingsViewModel @Inject constructor(
                     )
                 }
             }
+        }
+
+        // Check camera availability once
+        val cameraStatus = DeviceUtils.getAvailableCameras(context)
+        val scannerAvailable = cameraStatus.hasRearCamera || cameraStatus.hasFrontCamera
+        // Priority logic: Rear camera first, otherwise front camera
+        val useFront = !cameraStatus.hasRearCamera && cameraStatus.hasFrontCamera
+        // Update the UI state with the camera availability
+        _uiState.update { currentState ->
+            currentState.copy(
+                isQrScannerAvailable = scannerAvailable,
+                useFrontCamera = useFront
+            )
         }
     }
 
@@ -146,6 +162,25 @@ class SettingsViewModel @Inject constructor(
     fun clearAdyenSession() {
         viewModelScope.launch {
             InPersonPayments.clearSession()
+        }
+    }
+
+
+    /**
+     * Launches the QR code scanner.
+     * @param scanQRCodeLauncher The launcher for the QR code scanner.
+     */
+    fun launchQrScanner(scanQRCodeLauncher: ManagedActivityResultLauncher<ScannerConfig, QRResult>) {
+        // 1. Logic lives entirely in the ViewModel
+        val scannerConfig = ScannerConfig.build {
+            // Use the state determined during initialization
+            setUseFrontCamera(_uiState.value.useFrontCamera)
+            setShowCloseButton(true)
+        }
+
+        // 2. ViewModel sends the event (the command + data) to the UI
+        viewModelScope.launch {
+            scanQRCodeLauncher.launch(input = scannerConfig)
         }
     }
 
@@ -302,6 +337,8 @@ data class SettingsUiState(
     val logotypeUriPath: Uri? = null,
     val menuItems: List<MenuItem> = emptyList(),
     val currencyDropdownMenuExpanded: Boolean = false,
+    val isQrScannerAvailable: Boolean = false,
+    val useFrontCamera: Boolean = false,
     val adyenTtpConfigEnabled: Boolean = false,
     val adyenMerchantAccountTextField: String = "",
     val adyenStoreTextField: String = "",

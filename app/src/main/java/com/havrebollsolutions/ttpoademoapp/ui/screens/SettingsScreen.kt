@@ -2,6 +2,7 @@ package com.havrebollsolutions.ttpoademoapp.ui.screens
 
 import android.app.Activity
 import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityOptionsCompat
 import coil3.compose.AsyncImage
 import com.adyen.ipp.cardreader.api.ui.DeviceManagementActivity
 import com.havrebollsolutions.ttpoademoapp.R
@@ -50,7 +52,9 @@ import com.havrebollsolutions.ttpoademoapp.viewmodel.ImageCategory
 import com.havrebollsolutions.ttpoademoapp.viewmodel.SettingsUiState
 import com.havrebollsolutions.ttpoademoapp.viewmodel.SettingsViewModel
 import io.github.g00fy2.quickie.QRResult
+import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.ScanQRCode
+import io.github.g00fy2.quickie.config.ScannerConfig
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -130,8 +134,10 @@ fun SettingsScreenContent(
             },
             onStoreValueChange = { settingsViewModel.updateAdyenConfigTextFields(store = it) },
             onApiKeyValueChange = { settingsViewModel.updateAdyenConfigTextFields(apiKey = it) },
+            isQrScannerAvailable = settingsUiState.isQrScannerAvailable,
             onQrCodeScanned = settingsViewModel::handleAdyenConfigQrCodeResult,
-            onClearSession = settingsViewModel::clearAdyenSession
+            onClearSession = settingsViewModel::clearAdyenSession,
+            launchQrScanner = settingsViewModel::launchQrScanner
         )
 
         // New Item Form Component
@@ -333,7 +339,9 @@ fun AdyenConfigurationCard(
     merchantAccount: String,
     store: String,
     apiKey: String,
+    isQrScannerAvailable: Boolean,
     onQrCodeScanned: (QRResult) -> Unit,
+    launchQrScanner: (ManagedActivityResultLauncher<ScannerConfig, QRResult>) -> Unit,
     onClearSession: () -> Unit,
     onMerchantAccountValueChange: (String) -> Unit,
     onStoreValueChange: (String) -> Unit,
@@ -433,7 +441,9 @@ fun AdyenConfigurationCard(
                 Spacer(modifier = Modifier.height(12.dp))
                 GetAdyenConfigurationFromQRCode(
                     enabled = configEnabled,
-                    onQrCodeScanned = onQrCodeScanned
+                    isQrScannerAvailable = isQrScannerAvailable,
+                    onQrCodeScanned = onQrCodeScanned,
+                    launchQrScanner = launchQrScanner
                 )
             }
 
@@ -487,10 +497,12 @@ fun AdyenConfigurationCard(
 @Composable
 fun GetAdyenConfigurationFromQRCode(
     enabled: Boolean,
+    isQrScannerAvailable: Boolean,
     onQrCodeScanned: (QRResult) -> Unit,
+    launchQrScanner: (ManagedActivityResultLauncher<ScannerConfig, QRResult>) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scanQRCodeLauncher = rememberLauncherForActivityResult(ScanQRCode()) { result ->
+    val scanQRCodeLauncher = rememberLauncherForActivityResult(ScanCustomCode()) { result ->
         // Handle the result of the scan
         onQrCodeScanned(result)
 
@@ -503,29 +515,30 @@ fun GetAdyenConfigurationFromQRCode(
             modifier = Modifier
                 .weight(1f)
         )
-        Button(
-            onClick = {
-                // Launch the QR code scanner
-                scanQRCodeLauncher.launch(null)
-            },
-            modifier = Modifier
-                .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.inverseOnSurface,
-                contentColor = MaterialTheme.colorScheme.onBackground
-            ),
-            enabled = enabled
-        ) {
-            Text(text = "Configure using QR code")
-            Icon(
-                imageVector = Icons.Default.QrCodeScanner,
-                contentDescription = "Scan QR Code",
+        // Check if the QR scanner is available and display QR scanning option if true
+        if (isQrScannerAvailable) {
+            Button(
+                onClick = {
+                    launchQrScanner(scanQRCodeLauncher)
+                },
                 modifier = Modifier
-                    .padding(end = 12.dp)
-                    .size(36.dp)
-            )
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                ),
+                enabled = enabled
+            ) {
+                Text(text = "Configure using QR code")
+                Icon(
+                    imageVector = Icons.Default.QrCodeScanner,
+                    contentDescription = "Scan QR Code",
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .size(36.dp)
+                )
+            }
         }
-
     }
 }
 
@@ -786,8 +799,10 @@ fun AdyenTtpConfigurationCardPreview() {
             onStoreValueChange = {},
             onApiKeyValueChange = {},
             onAdyenConfigSave = {},
+            isQrScannerAvailable = true,
             onQrCodeScanned = {},
-            onClearSession = {}
+            onClearSession = {},
+            launchQrScanner = {}
         )
     }
 }
@@ -798,7 +813,9 @@ fun GetAdyenConfigurationFromQRCodePreview() {
     TTPOADemoAppTheme {
         GetAdyenConfigurationFromQRCode(
             enabled = false,
-            onQrCodeScanned = {}
+            isQrScannerAvailable = true,
+            onQrCodeScanned = {},
+            launchQrScanner = {}
         )
     }
 }
