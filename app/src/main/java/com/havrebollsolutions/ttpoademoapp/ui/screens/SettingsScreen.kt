@@ -23,6 +23,7 @@ import com.havrebollsolutions.ttpoademoapp.data.database.entities.MenuItem
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -35,8 +36,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -623,6 +627,19 @@ fun NewItemFormCard(
     onImageSelected: (Uri?, ImageCategory) -> Unit,
     onAddItem: () -> Unit
 ) {
+    // Get Focus Manager to clear focus
+    val focusManager = LocalFocusManager.current
+    // Get Keyboard Controller to explicitly hide the keyboard (optional, but robust)
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val keyboardActions = KeyboardActions(
+        onDone = {
+            // Clear focus when the keyboard is done
+            focusManager.clearFocus()
+            // Hide the keyboard when done
+            keyboardController?.hide()
+        }
+    )
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -643,6 +660,7 @@ fun NewItemFormCard(
                 value = uiState.newItemName,
                 onValueChange = onNameChange,
                 label = { Text("Item Name") },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -651,6 +669,7 @@ fun NewItemFormCard(
                 value = uiState.newItemDesc,
                 onValueChange = onDescChange,
                 label = { Text("Description") },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth()
             )
             // Price Field
@@ -658,7 +677,10 @@ fun NewItemFormCard(
                 value = uiState.newItemPrice,
                 onValueChange = onPriceChange,
                 label = { Text("Price") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -667,7 +689,10 @@ fun NewItemFormCard(
                 value = uiState.newItemVatRate,
                 onValueChange = onVatRateChange,
                 label = { Text("VAT Rate") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
                 maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -675,7 +700,11 @@ fun NewItemFormCard(
                 value = uiState.newItemQuantity,
                 onValueChange = onQuantityChange,
                 label = { Text("Quantity in Stock") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = keyboardActions,
                 maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
