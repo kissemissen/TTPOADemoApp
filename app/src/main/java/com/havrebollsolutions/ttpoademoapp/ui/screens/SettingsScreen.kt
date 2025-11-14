@@ -6,6 +6,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -757,12 +758,20 @@ fun ExistingMenuItemsCard(
                     .fillMaxWidth()
                     .heightIn(max = 300.dp)
             ) {
-                items(menuItems) { item ->
+                items(
+                    menuItems,
+                    key = { it.id }
+                ) { item ->
                     MenuItemRow(
                         item = item,
                         onClickMoveMenuItemUp = { onClickMoveMenuItemUp(item) },
                         onClickMoveMenuItemDown = { onClickMoveMenuItemDown(item) },
-                        onDelete = { onDeleteItem(item) }
+                        onDelete = { onDeleteItem(item) },
+                        modifier = Modifier
+                            .animateItem(
+                            fadeInSpec = tween(durationMillis = 250),
+                            fadeOutSpec = tween(durationMillis = 100),
+                            )
                     )
                     HorizontalDivider()
                 }
@@ -777,10 +786,11 @@ fun MenuItemRow(
     item: MenuItem,
     onClickMoveMenuItemUp: () -> Unit,
     onClickMoveMenuItemDown: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
