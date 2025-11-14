@@ -23,4 +23,6 @@
     <string name="payment_failed">Payment Failed</string>
     <string name="no_connected_devices_found">No connected devices found.</string>
     <string name="made_with_3_by_j_kisselgof_2025">Made with &lt;3\nby J. Kisselgof 2025</string>
+    <string name="move_up">Move Up</string>
+    <string name="move_down">Move Down</string>
 </resources>

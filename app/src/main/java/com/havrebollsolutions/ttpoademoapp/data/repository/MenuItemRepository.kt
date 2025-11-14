@@ -31,4 +31,24 @@ class MenuItemRepository @Inject constructor(
     suspend fun updateMenuItem(menuItem: MenuItem) {
         menuItemDao.updateMenuItem(menuItem)
     }
+
+    suspend fun moveMenuItemDown(currentItem: MenuItem) {
+        // Find the item with the next highest index
+        val nextItem = menuItemDao.getNextMenuItem(currentItem.orderIndex)
+
+        // Only swap if the next item exists (i.e., not the last item)
+        if (nextItem != null) {
+            menuItemDao.swapOrderIndices(currentItem, nextItem)
+        }
+    }
+
+    suspend fun moveMenuItemUp(currentItem: MenuItem) {
+        // Find the item with the next lowest index
+        val previousItem = menuItemDao.getPreviousMenuItem(currentItem.orderIndex)
+
+        // Only swap if the previous item exists (i.e., not the first item)
+        if (previousItem != null) {
+            menuItemDao.swapOrderIndices(currentItem, previousItem)
+        }
+    }
 }

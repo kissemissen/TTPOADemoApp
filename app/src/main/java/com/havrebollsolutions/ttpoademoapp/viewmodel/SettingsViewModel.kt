@@ -319,6 +319,26 @@ class SettingsViewModel @Inject constructor(
     }
 
     /**
+     * Moves a menu item up in the list.
+     * @param menuItem The menu item to move up.
+     */
+    fun onClickMoveMenuItemDown(menuItem: MenuItem) {
+        viewModelScope.launch {
+            menuItemRepository.moveMenuItemDown(menuItem)
+        }
+    }
+
+    /**
+     * Moves a menu item down in the list.
+     * @param menuItem The menu item to move down.
+     */
+    fun onClickMoveMenuItemUp(menuItem: MenuItem) {
+        viewModelScope.launch {
+            menuItemRepository.moveMenuItemUp(menuItem)
+        }
+    }
+
+    /**
      * Warms up the Adyen SDK.
      */
     fun warmUpAdyenSDK() {

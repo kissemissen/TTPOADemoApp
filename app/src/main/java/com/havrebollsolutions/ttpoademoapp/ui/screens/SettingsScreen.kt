@@ -29,6 +29,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoveDown
+import androidx.compose.material.icons.filled.MoveUp
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material3.HorizontalDivider
@@ -162,6 +164,8 @@ fun SettingsScreenContent(
         // Existing Items List Component
         ExistingMenuItemsCard(
             menuItems = settingsUiState.menuItems,
+            onClickMoveMenuItemUp = settingsViewModel::onClickMoveMenuItemUp,
+            onClickMoveMenuItemDown = settingsViewModel::onClickMoveMenuItemDown,
             onDeleteItem = settingsViewModel::deleteMenuItem
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -730,6 +734,8 @@ fun NewItemFormCard(
 @Composable
 fun ExistingMenuItemsCard(
     menuItems: List<MenuItem>,
+    onClickMoveMenuItemUp: (MenuItem) -> Unit,
+    onClickMoveMenuItemDown: (MenuItem) -> Unit,
     onDeleteItem: (MenuItem) -> Unit
 ) {
     Card(
@@ -752,7 +758,12 @@ fun ExistingMenuItemsCard(
                     .heightIn(max = 300.dp)
             ) {
                 items(menuItems) { item ->
-                    MenuItemRow(item = item, onDelete = { onDeleteItem(item) })
+                    MenuItemRow(
+                        item = item,
+                        onClickMoveMenuItemUp = { onClickMoveMenuItemUp(item) },
+                        onClickMoveMenuItemDown = { onClickMoveMenuItemDown(item) },
+                        onDelete = { onDeleteItem(item) }
+                    )
                     HorizontalDivider()
                 }
             }
@@ -762,7 +773,12 @@ fun ExistingMenuItemsCard(
 
 // Further extraction for list item reusability
 @Composable
-fun MenuItemRow(item: MenuItem, onDelete: () -> Unit) {
+fun MenuItemRow(
+    item: MenuItem,
+    onClickMoveMenuItemUp: () -> Unit,
+    onClickMoveMenuItemDown: () -> Unit,
+    onDelete: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -774,12 +790,26 @@ fun MenuItemRow(item: MenuItem, onDelete: () -> Unit) {
             text = item.name,
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(onClick = onDelete) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete ${item.name}",
-                tint = MaterialTheme.colorScheme.error
-            )
+        Row {
+            IconButton(onClick = onClickMoveMenuItemUp) {
+                Icon(
+                    imageVector = Icons.Default.MoveUp,
+                    contentDescription = stringResource(R.string.move_up),
+                )
+            }
+            IconButton(onClick = onClickMoveMenuItemDown) {
+                Icon(
+                    imageVector = Icons.Default.MoveDown,
+                    contentDescription = stringResource(R.string.move_down),
+                )
+            }
+            IconButton(onClick = onDelete) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete ${item.name}",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 }
@@ -845,6 +875,27 @@ fun GetAdyenConfigurationFromQRCodePreview() {
             isQrScannerAvailable = true,
             onQrCodeScanned = {},
             launchQrScanner = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MenuItemRowPreview() {
+    TTPOADemoAppTheme {
+        MenuItemRow(
+            item = MenuItem(
+                name = "Example Item",
+                description = "This is an example item.",
+                price = 19.99,
+                vatRate = 25.0,
+                quantityInStock = 10,
+                imagePath = null,
+                orderIndex = 0
+            ),
+            onClickMoveMenuItemUp = {},
+            onClickMoveMenuItemDown = {},
+            onDelete = {}
         )
     }
 }
