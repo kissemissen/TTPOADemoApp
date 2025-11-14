@@ -3,6 +3,7 @@ package com.havrebollsolutions.ttpoademoapp.di
 import android.content.Context
 import androidx.room.Room
 import com.havrebollsolutions.ttpoademoapp.data.database.AppDatabase
+import com.havrebollsolutions.ttpoademoapp.data.database.MIGRATION_3_4
 import com.havrebollsolutions.ttpoademoapp.data.database.daos.ConfigDao
 import com.havrebollsolutions.ttpoademoapp.data.database.daos.MenuItemDao
 import com.havrebollsolutions.ttpoademoapp.data.database.daos.OrderDao
@@ -24,7 +25,10 @@ object DatabaseModule {
                 context,
                 AppDatabase::class.java,
                 "app_database"
-            ).fallbackToDestructiveMigration(false).build()
+            )
+            .addMigrations(MIGRATION_3_4)
+            .fallbackToDestructiveMigration(false)
+            .build()
     }
 
     @Provides

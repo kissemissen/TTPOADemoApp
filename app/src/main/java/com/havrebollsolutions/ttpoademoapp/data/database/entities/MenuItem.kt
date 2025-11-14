@@ -11,5 +11,6 @@ data class MenuItem(
     val price: Double,
     val vatRate: Double,
     val quantityInStock: Int,
-    val imagePath: String?
+    val imagePath: String?,
+    val orderIndex: Int = 0
 )

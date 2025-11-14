@@ -15,7 +15,13 @@ class MenuItemRepository @Inject constructor(
     }
 
     suspend fun insertMenuItem(menuItem: MenuItem) {
-        menuItemDao.insertMenuItem(menuItem)
+        // 1. Find the current highest index
+        val maxIndex = menuItemDao.getMaxOrderIndex()
+        val newIndex = maxIndex + 1
+
+        // 2. Insert the item with the new index
+        val newItem = menuItem.copy(orderIndex = newIndex)
+        menuItemDao.insertMenuItem(newItem)
     }
 
     suspend fun deleteMenuItem(menuItem: MenuItem) {
